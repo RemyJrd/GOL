@@ -6,8 +6,9 @@
 
 int main() {
 	srand(time(0));
-	
+
 	int lignes, colonnes;
+	Grid* current;
 
 	printf("--- Game Of Life ---\n Colonnes: ");
 	scanf("%d", &colonnes);
@@ -15,8 +16,11 @@ int main() {
 	printf("Lignes: ");
 	scanf("%d", &lignes);
 
-	VerifInit(lignes, colonnes);
-	Grid_init(lignes, colonnes);
+
+	current = VerifInit(lignes, colonnes);
+	current = Grid_init(lignes, colonnes);
+	current = Grid_fill(current);
+
 
 
 	return 0;

@@ -11,7 +11,7 @@ int VerifInit(int lignes, int colonnes) {
         return 0;
 }
 
-Grid Grid_init(int lignes, int colonnes) {
+Grid *Grid_init(int lignes, int colonnes) {
     int i;
     printf("--- Initialisation 1ere grille ---");
 
@@ -24,18 +24,24 @@ Grid Grid_init(int lignes, int colonnes) {
     for (int i=0; i < lignes ; i++) {
         current->Tab[i] = malloc(colonnes * sizeof(int));
     }
-return *current;
+return current;
 }
 
 int random() {
    return 1 + rand() % 100;
 }
 
-Grid Grid_fill(Grid curent) {
+Grid *Grid_fill(Grid* current) {
+    int i, y;
+        for (int i=0; i < current->lignes ; i++) {
+            for (int y=0; i < current->colonnes ; y++) {
+                current->Tab[i] = malloc(current->colonnes * sizeof(int));
+            }
+    }
     printf("tes quune merde | %d \n", current->Tab[i]);
-printf("pute");
+
+return current;
 }
 
-Grid Grid_display(Grid current) {
-printf("pute");
+Grid *Grid_display(Grid *current) {
 }

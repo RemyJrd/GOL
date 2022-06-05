@@ -7,9 +7,9 @@
 #include "struct.h"
 
 int VerifInit(int,int);
-Grid Grid_init(int,int);
-Grid Grid_fill(Grid);
-Grid Grid_display(Grid);
+Grid *Grid_init(int,int);
+Grid *Grid_fill(Grid*);
+Grid *Grid_display(Grid*);
 
 
 
