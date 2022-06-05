@@ -5,8 +5,8 @@ typedef struct ControlGrid ControlGrid;
 typedef struct Grid Grid;
 
     struct ControlGrid {
-        Grid* First;
-        Grid* Last;
+        Grid* first;
+        Grid* last;
     };
 
     struct Grid {

@@ -13,5 +13,7 @@ ControlGrid* ControlGrid_init();
 Grid* Grid_random(Grid*);
 ControlGrid* ControlGrid_fill(ControlGrid*, Grid*);
 double random(void);
+Grid* NeighbourCount(Grid*);
+Grid* Generate(Grid*);
 
 #endif

@@ -25,14 +25,14 @@ Grid *Grid_init(int lignes, int colonnes) {
 return (current);
 }
 
-/* ControlGrid *ControlGrid_init() {
+ControlGrid *ControlGrid_init() {
     printf("--- Initialisation ControlGrid ---");
 
     ControlGrid* controlcurrent = malloc(sizeof(ControlGrid));
-    controlcurrent->First = NULL;
-    controlcurrent->Last = NULL;
+    controlcurrent->first = NULL;
+    controlcurrent->last = NULL;
 return controlcurrent;
-} */
+}
 
 Grid* Grid_random(Grid* current) {
     int i, y;
@@ -45,19 +45,28 @@ Grid* Grid_random(Grid* current) {
 return current;
 }
 
-/* ControlGrid* ControlGrid_fill(ControlGrid* controlcurrent, Grid* current) {
+ControlGrid* ControlGrid_fill(ControlGrid* controlcurrent, Grid* current) {
+    int i, y;
     printf("--- Remplissage ControlGrid ---");
+    Grid* nouvelle = malloc(sizeof(*nouvelle));
 
-    if (controlcurrent->First == NULL) {
-        Grid* nouvelle = malloc(sizeof(*nouvelle));
-        nouvelle= Grid_fill(nouvelle);
+    for (i=0; i <current->lignes; i++) {
+        for(y=0; y <current->colonnes; y++) {
+            nouvelle->Tab[i][y] = current->Tab[i][y];
+        }
     }
+
+    if (controlcurrent->first == NULL) {
+        nouvelle->previous = NULL;
+    } 
     else {
 
+        controlcurrent->last=nouvelle;
+        nouvelle->next=NULL;
     }
    
 return controlcurrent;
-} */
+ }
 
 double random() {
    return 0 + (int) (rand() / (double) (RAND_MAX + 1) * (1 - 0 + 1));
@@ -74,4 +83,76 @@ Grid *Grid_display(Grid *current) {
     }
 
 return current;
+}
+
+Grid* NeighbourCount(Grid* current) {
+    int i, y, cnt=0;
+    Grid* Nei = Grid_init(current->lignes,current->colonnes);
+
+    for(i=0; i<current->lignes; i++) {
+        for(y=0; i<current->colonnes; y++) {
+                if (i < current->lignes-1)
+
+                    if (current->Tab[i+1][y] == 1)
+                    {
+                        cnt++;
+                    }
+                    if (i>0)
+                    {
+                        if (current->Tab[i-1][y] == 1)
+                        {
+                            cnt++;
+                        }
+                    }
+                    if (y>0)
+                    {
+                    if (i < current->lignes-1)
+                        if (current->Tab[i+1][y-1]==1)
+                        {
+                            cnt++;
+                        }
+                    }
+                    if (y>0)
+                    {
+                        if (current->Tab[i][y-1]==1)
+                        {
+                            cnt++;
+                        }
+                    }
+                    if (y>0 && i>0)
+                    {
+                        if (current->Tab[i-1][y-1] == 1)
+                        {
+                            cnt++;
+                        }
+                    }
+                    if (y < current->colonnes-1 && i< current->lignes-1)
+                    if (current->Tab [i+1][y+1]== 1)
+                    {
+                        cnt++;
+                    }
+                    if (y < current->colonnes-1)
+                    if (current->Tab[i][y+1]==1)
+                    {
+                        cnt++;
+                    }
+                    if (i>0)
+                    {
+                        if (y < current->colonnes-1)
+                        if (current->Tab[i-1][y+1]== 1)
+                        {
+                            cnt++;
+                        }
+        }
+        Nei->Tab[i][y]=cnt;
+        cnt=0;
+    }
+}
+
+    return(Nei);
+}
+
+Grid* Generate(Grid* current) {
+    Grid* nouvelle=NeighbourCount(current);
+    return current;
 }

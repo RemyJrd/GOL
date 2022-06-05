@@ -5,6 +5,9 @@
 
 /*		 GOL - ESIEE-IT Rémy JARDIN 		*/
 
+//TODO:
+//AVANCER SUR CONTROLGRIDFILL, maintenant qu'on a calculer les voisins, il faut appliquer!
+
 int main() {
 	srand(time(0));
 
