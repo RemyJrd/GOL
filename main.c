@@ -1,5 +1,6 @@
 #include "functions.h"
 #include "functions.c"
+#include <stdlib.h>
 #include <time.h>
 
 /*		 GOL - ESIEE-IT Rémy JARDIN 		*/
@@ -9,6 +10,7 @@ int main() {
 
 	int lignes, colonnes;
 	Grid* current;
+	//ControlGrid* ControlCurrent;
 
 	printf("--- Game Of Life ---\n Colonnes: ");
 	scanf("%d", &colonnes);
@@ -16,11 +18,10 @@ int main() {
 	printf("Lignes: ");
 	scanf("%d", &lignes);
 
-
-	current = VerifInit(lignes, colonnes);
+ 	VerifInit(lignes, colonnes);
 	current = Grid_init(lignes, colonnes);
-	current = Grid_fill(current);
-
+	current = Grid_random(current);
+	current = Grid_display(current);
 
 
 	return 0;

@@ -13,35 +13,65 @@ int VerifInit(int lignes, int colonnes) {
 
 Grid *Grid_init(int lignes, int colonnes) {
     int i;
-    printf("--- Initialisation 1ere grille ---");
-
-    Grid* current = malloc(sizeof(Grid));
-   
+    printf("--- Initialisation 1ere grille --- \n");
+    Grid* current = (Grid*) malloc(sizeof(Grid));
     current->lignes = lignes;
     current->colonnes = colonnes;
-    current->Tab = malloc(lignes * sizeof(int));
+    current->Tab = malloc(lignes * sizeof(int*));
 
-    for (int i=0; i < lignes ; i++) {
+    for (i=0; i < lignes ; i++) {
         current->Tab[i] = malloc(colonnes * sizeof(int));
     }
-return current;
+return (current);
 }
 
-int random() {
-   return 1 + rand() % 100;
-}
+/* ControlGrid *ControlGrid_init() {
+    printf("--- Initialisation ControlGrid ---");
 
-Grid *Grid_fill(Grid* current) {
+    ControlGrid* controlcurrent = malloc(sizeof(ControlGrid));
+    controlcurrent->First = NULL;
+    controlcurrent->Last = NULL;
+return controlcurrent;
+} */
+
+Grid* Grid_random(Grid* current) {
     int i, y;
-        for (int i=0; i < current->lignes ; i++) {
-            for (int y=0; i < current->colonnes ; y++) {
-                current->Tab[i] = malloc(current->colonnes * sizeof(int));
+    printf("--- Process en cours... --- \n");
+        for (i=0; i < current->lignes; i++) {
+            for (y=0; y < current->colonnes; y++) {
+                current->Tab[i][y] = random();
             }
     }
-    printf("tes quune merde | %d \n", current->Tab[i]);
-
 return current;
+}
+
+/* ControlGrid* ControlGrid_fill(ControlGrid* controlcurrent, Grid* current) {
+    printf("--- Remplissage ControlGrid ---");
+
+    if (controlcurrent->First == NULL) {
+        Grid* nouvelle = malloc(sizeof(*nouvelle));
+        nouvelle= Grid_fill(nouvelle);
+    }
+    else {
+
+    }
+   
+return controlcurrent;
+} */
+
+double random() {
+   return 0 + (int) (rand() / (double) (RAND_MAX + 1) * (1 - 0 + 1));
 }
 
 Grid *Grid_display(Grid *current) {
+    printf("--- Affichage de la Grille ! ---- \n");
+    int i, y;
+        for (i=0; i < current->lignes ; i++) {
+            for (y=0; y < current->colonnes ; y++) {
+                printf("| %d |", current->Tab[i][y]);
+            }
+            printf("\n");
+    }
+
+return current;
 }

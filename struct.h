@@ -2,18 +2,19 @@
 #define STRUCT_H
 
 typedef struct ControlGrid ControlGrid;
+typedef struct Grid Grid;
+
     struct ControlGrid {
-        struct Grid* First;
-        struct Grid* Last;
+        Grid* First;
+        Grid* Last;
     };
 
-typedef struct Grid Grid;
     struct Grid {
         int** Tab;
         int lignes;
         int colonnes;
-        struct Grid* next;
-        struct Grid* previous;
+        Grid* next;
+        Grid* previous;
     };
 
 #endif // STRUCT_H
