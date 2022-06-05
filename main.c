@@ -1,10 +1,13 @@
 #include "functions.h"
 #include "functions.c"
+#include <time.h>
 
 /*		 GOL - ESIEE-IT Rémy JARDIN 		*/
 
 int main() {
-	int colonnes, lignes;
+	srand(time(0));
+	
+	int lignes, colonnes;
 
 	printf("--- Game Of Life ---\n Colonnes: ");
 	scanf("%d", &colonnes);
@@ -13,6 +16,8 @@ int main() {
 	scanf("%d", &lignes);
 
 	VerifInit(lignes, colonnes);
+	Grid_init(lignes, colonnes);
+
 
 	return 0;
 }

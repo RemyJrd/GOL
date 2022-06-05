@@ -4,9 +4,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "struct.h"
 
 int VerifInit(int,int);
-void Grilles_init();
+Grid Grid_init(int,int);
+Grid Grid_fill(Grid);
+Grid Grid_display(Grid);
 
 
 

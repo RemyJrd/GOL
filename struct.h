@@ -1,6 +1,8 @@
+#ifndef STRUCT_H
+#define STRUCT_H
+
 typedef struct ControlGrid ControlGrid;
-    struct Node {
-        int data;
+    struct ControlGrid {
         struct Grid* First;
         struct Grid* Last;
     };
@@ -8,6 +10,10 @@ typedef struct ControlGrid ControlGrid;
 typedef struct Grid Grid;
     struct Grid {
         int** Tab;
+        int lignes;
+        int colonnes;
         struct Grid* next;
         struct Grid* previous;
     };
+
+#endif // STRUCT_H
