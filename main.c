@@ -8,48 +8,56 @@
 int main() {
 	srand(time(0));
 
-	int lignes, colonnes, select, round;
+	int lignes, colonnes, select, round, choixmode;
 	Grid* current;
 	ControlGrid* ControlCurrent;
 
-	printf("--- Game Of Life ---\n Colonnes: ");
-	scanf("%d", &colonnes);
+	printf("--- Game Of Life ---\nChoisir le type de lancement: \n1 - Lignes et colonnes manuelle\n2 - Grille prédéfini");
+	scanf("%d", &choixmode);
+	
+	
+	if (choixmode = 1) {
+		printf("Nombres de colonnes : ");
+		scanf("%d", &colonnes);
 
-	printf("Lignes: ");
-	scanf("%d", &lignes);
+		printf("Nombres de Lignes: ");
+		scanf("%d", &lignes);
 
- 	VerifInit(lignes, colonnes);
-	current = Grid_init(lignes, colonnes);
-	current = Grid_random(current);
-	ControlCurrent = ControlGrid_init();
-	ControlCurrent = ControlGrid_fill(ControlCurrent, current);
-	round = round+1;
+ 		VerifInit(lignes, colonnes);
+		current = Grid_init(lignes, colonnes);
+		current = Grid_random(current);
+		ControlCurrent = ControlGrid_init();
+		ControlCurrent = ControlGrid_fill(ControlCurrent, current);
+		round = 1;
 
+		printf("--- 1ere grille ---\n");
+		Grid_display(ControlCurrent->last);
 
-	printf("--- 1st Grid ---\n");
-	Grid_display(ControlCurrent->last);
-
-	while (1) {
-        printf("--- %d grilles. ---\n1 - Génération suivante \n2 génération précédente", round);
-        scanf("%d", &select);
-        if (select==1) {
+		while (1) {
+        	printf("--- %d grilles. ---\n1 - Generation suivante \n2 Generation precedente\n", round);
+        	scanf("%d", &select);
+        	if (select==1) {
 				printf("Generation %d \n", round);
-                printf("============= \n");
                 ControlCurrent=NextGrid(ControlCurrent, current);
-                Grid_display(ControlCurrent->last);
-                round+=1;
+                round = round+1;
             }
             if (select == 2)
             {
-                ControlCurrent= PreviousGrid(ControlCurrent->last);
-                Grid_display(ControlCurrent->last);
-                round-=1;
+                ControlCurrent= PreviousGrid(ControlCurrent);
+                round = round-1;
             }
             else {
                 EXIT_FAILURE;
             }
-
+		Grid_display(ControlCurrent->last);
         }
+	}
+	else if (choixmode=2) {
 
-	return 0;
+	} 
+	else {
+		Printf("Erreur de saisie !");
+	}
+
+return 0;
 }

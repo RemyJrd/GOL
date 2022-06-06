@@ -26,11 +26,13 @@ return (current);
 }
 
 ControlGrid *ControlGrid_init() {
-    printf("--- Initialisation ControlGrid ---");
+    printf("--- Initialisation ControlGrid ---\n");
 
     ControlGrid* controlcurrent = malloc(sizeof(*controlcurrent));
-    controlcurrent->first = NULL;
-    controlcurrent->last = NULL;
+    if(controlcurrent != NULL)
+    {controlcurrent->first = NULL;
+    controlcurrent->last = NULL;}
+    
 return controlcurrent;
 }
 
@@ -46,27 +48,32 @@ return current;
 }
 
 ControlGrid* ControlGrid_fill(ControlGrid* controlcurrent, Grid* current) {
-    int i, y;
-    printf("--- Remplissage ControlGrid ---");
-    Grid* nouvelle = malloc(sizeof(*nouvelle));
-
-    for (i=0; i <current->lignes; i++) {
-        for(y=0; y <current->colonnes; y++) {
-            nouvelle->Tab[i][y] = current->Tab[i][y];
+        if (controlcurrent != NULL) {
+            
+        Grid* nouvelle = malloc(sizeof *nouvelle);
+        nouvelle = Grid_init(current->lignes,current->colonnes);
+        if (nouvelle != NULL) {   
+            for(int i = 0; i < current->lignes; i++) {
+                for(int y = 0; y < current->colonnes; y++) {
+                    nouvelle->Tab[i][y] = current->Tab[i][y];
+                }
+            }
+            nouvelle->next = NULL;
+            if (controlcurrent->last == NULL) {
+                nouvelle->previous = NULL;
+                controlcurrent->first = nouvelle;
+                controlcurrent->last = nouvelle;
+                printf("prout");
+            }
+            else
+            {
+                controlcurrent->last->next = nouvelle;
+                nouvelle->previous = controlcurrent->last;
+                controlcurrent->last = nouvelle;
+            }
         }
     }
-    nouvelle->next = NULL;
 
-    if (controlcurrent->first == NULL) {
-        nouvelle->previous = NULL;
-        controlcurrent->first = nouvelle;
-        controlcurrent->last = nouvelle;
-    } 
-    else {
-        controlcurrent->last->next = nouvelle;
-        nouvelle->previous = controlcurrent->last;
-    }
-   
 return controlcurrent;
  }
 
@@ -87,10 +94,9 @@ void Grid_display(Grid *current) {
 
 Grid* NeighbourCount(Grid* current) {
     int i, y, cnt=0;
-    Grid* Nei = Grid_init(current->lignes,current->colonnes);
-
+    Grid* Nei = Grid_init(current->lignes, current->colonnes);
     for(i=0; i<current->lignes; i++) {
-        for(y=0; i<current->colonnes; y++) {
+        for(y=0; y<current->colonnes; y++) {
                     if (i < current->lignes-1)
 
                     if (current->Tab[i+1][y] == 1)
@@ -146,8 +152,11 @@ Grid* NeighbourCount(Grid* current) {
         }
         Nei->Tab[i][y]=cnt;
         cnt=0;
-    }
+       
+            }
+             
 }
+
     return(Nei);
 }
 
@@ -159,10 +168,13 @@ Grid* Generate(Grid* current) {
             if (current->Tab[i][y] == 1) 
             {
                 if (nouvelle->Tab[i][y] == 2 || nouvelle->Tab[i][y] == 3) {
+                    printf("sheeesh");
                     current->Tab[i][y] = 1;}
-                if (current->Tab[i][y] >= 4 && nouvelle->Tab[i][y] <= 8) {
+                if (nouvelle->Tab[i][y] >= 4 && nouvelle->Tab[i][y] <= 8) {
+                    printf("pute");
                     current->Tab[i][y] = 0;}
                 if (nouvelle->Tab[i][y] == 0 || nouvelle->Tab[i][y] == 1) {
+                    printf("dedicace a personne");
                     current->Tab[i][y] = 0;}
             }
             else
@@ -174,31 +186,33 @@ Grid* Generate(Grid* current) {
             }
         }
     }
-
-
     return current;
 }
 
 ControlGrid* PreviousGrid(ControlGrid *controlcurrent){
     Grid* current = controlcurrent->last;
+
     current = current->previous;
-    controlcurrent->last=current;
+    controlcurrent->last = current;
 
     return controlcurrent;
 }
 
-ControlGrid* NextGrid(ControlGrid *controlcurrent, Grid* current){
-    Grid* move = controlcurrent->last;
-    move = current->next;
-    if (controlcurrent->last->next == NULL)
+ControlGrid* NextGrid(ControlGrid *controlcurrent, Grid* g){
+    Grid* current = controlcurrent->last;
+    
+    current = current->next;
+if (controlcurrent->last->next == NULL)
     {
-        Generate(current);
-        controlcurrent=ControlGrid_fill(controlcurrent ,current);
+        g =  Generate(g);
+        controlcurrent = ControlGrid_fill(controlcurrent,g);
+        
         return controlcurrent;
     }
-    controlcurrent->last=move;
+else {
+    printf("test2");
+    controlcurrent->last = current;
     return controlcurrent;
-
 }
-
-//sheesh
+}
+//sheesh vérifie l'initiation à null.
