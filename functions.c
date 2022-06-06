@@ -28,7 +28,7 @@ return (current);
 ControlGrid *ControlGrid_init() {
     printf("--- Initialisation ControlGrid ---");
 
-    ControlGrid* controlcurrent = malloc(sizeof(ControlGrid));
+    ControlGrid* controlcurrent = malloc(sizeof(*controlcurrent));
     controlcurrent->first = NULL;
     controlcurrent->last = NULL;
 return controlcurrent;
@@ -55,14 +55,16 @@ ControlGrid* ControlGrid_fill(ControlGrid* controlcurrent, Grid* current) {
             nouvelle->Tab[i][y] = current->Tab[i][y];
         }
     }
+    nouvelle->next = NULL;
 
     if (controlcurrent->first == NULL) {
         nouvelle->previous = NULL;
+        controlcurrent->first = nouvelle;
+        controlcurrent->last = nouvelle;
     } 
     else {
-
-        controlcurrent->last=nouvelle;
-        nouvelle->next=NULL;
+        controlcurrent->last->next = nouvelle;
+        nouvelle->previous = controlcurrent->last;
     }
    
 return controlcurrent;
@@ -72,7 +74,7 @@ double random() {
    return 0 + (int) (rand() / (double) (RAND_MAX + 1) * (1 - 0 + 1));
 }
 
-Grid *Grid_display(Grid *current) {
+void Grid_display(Grid *current) {
     printf("--- Affichage de la Grille ! ---- \n");
     int i, y;
         for (i=0; i < current->lignes ; i++) {
@@ -81,8 +83,6 @@ Grid *Grid_display(Grid *current) {
             }
             printf("\n");
     }
-
-return current;
 }
 
 Grid* NeighbourCount(Grid* current) {
@@ -91,7 +91,7 @@ Grid* NeighbourCount(Grid* current) {
 
     for(i=0; i<current->lignes; i++) {
         for(y=0; i<current->colonnes; y++) {
-                if (i < current->lignes-1)
+                    if (i < current->lignes-1)
 
                     if (current->Tab[i+1][y] == 1)
                     {
@@ -148,11 +148,57 @@ Grid* NeighbourCount(Grid* current) {
         cnt=0;
     }
 }
-
     return(Nei);
 }
 
 Grid* Generate(Grid* current) {
     Grid* nouvelle=NeighbourCount(current);
+    int i, y;
+    for (i = 0 ; i < current->lignes ; i++) {
+        for (y = 0 ; y < current->colonnes ; y++) {
+            if (current->Tab[i][y] == 1) 
+            {
+                if (nouvelle->Tab[i][y] == 2 || nouvelle->Tab[i][y] == 3) {
+                    current->Tab[i][y] = 1;}
+                if (current->Tab[i][y] >= 4 && nouvelle->Tab[i][y] <= 8) {
+                    current->Tab[i][y] = 0;}
+                if (nouvelle->Tab[i][y] == 0 || nouvelle->Tab[i][y] == 1) {
+                    current->Tab[i][y] = 0;}
+            }
+            else
+            {
+                if (nouvelle->Tab[i][y] == 3)
+                {
+                    current->Tab[i][y] = 1;
+                }
+            }
+        }
+    }
+
+
     return current;
 }
+
+ControlGrid* PreviousGrid(ControlGrid *controlcurrent){
+    Grid* current = controlcurrent->last;
+    current = current->previous;
+    controlcurrent->last=current;
+
+    return controlcurrent;
+}
+
+ControlGrid* NextGrid(ControlGrid *controlcurrent, Grid* current){
+    Grid* move = controlcurrent->last;
+    move = current->next;
+    if (controlcurrent->last->next == NULL)
+    {
+        Generate(current);
+        controlcurrent=ControlGrid_fill(controlcurrent ,current);
+        return controlcurrent;
+    }
+    controlcurrent->last=move;
+    return controlcurrent;
+
+}
+
+//sheesh
