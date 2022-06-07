@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <conio.h>
 #include "functions.h"
-#include "struct.h"
 
 int VerifInit(int lignes, int colonnes) {
     if (lignes <= 0 && colonnes <= 0) {
@@ -11,40 +11,42 @@ int VerifInit(int lignes, int colonnes) {
         return 0;
 }
 
-Grid *Grid_init(int lignes, int colonnes) {
-    int i;
-    printf("--- Initialisation 1ere grille --- \n");
-    Grid* current = (Grid*) malloc(sizeof(Grid));
-    current->lignes = lignes;
-    current->colonnes = colonnes;
-    current->Tab = malloc(lignes * sizeof(int*));
-
-    for (i=0; i < lignes ; i++) {
-        current->Tab[i] = malloc(colonnes * sizeof(int));
-    }
-return (current);
+double random() {
+   return 0 + (int) (rand() / (double) (RAND_MAX + 1) * (1 - 0 + 1));
 }
 
-ControlGrid *ControlGrid_init() {
-    printf("--- Initialisation ControlGrid ---\n");
+void Grid_display(Grid *current) {
+    int i, y;
+        for (i=0; i < current->lignes ; i++) {
+            for (y=0; y < current->colonnes ; y++) {
+                printf("| %d |", current->Tab[i][y]);
+            }
+            printf("\n");
+    }
+}
 
+void save(Grid* g){
+    FILE *f = fopen("write.txt", "wb");
+    printf("\n");
+    int i,y;
+    for (i=0; i < g->lignes; i++)
+    {
+        for (y=0; y < g->colonnes; y++)
+        {
+            fprintf(f," %d",g->Tab[i][y]);
+        }
+        fprintf(f,"\n");
+    }
+    fclose(f);
+}
+
+ControlGrid* ControlGrid_init() {
     ControlGrid* controlcurrent = malloc(sizeof(*controlcurrent));
     if(controlcurrent != NULL)
     {controlcurrent->first = NULL;
     controlcurrent->last = NULL;}
     
 return controlcurrent;
-}
-
-Grid* Grid_random(Grid* current) {
-    int i, y;
-    printf("--- Process en cours... --- \n");
-        for (i=0; i < current->lignes; i++) {
-            for (y=0; y < current->colonnes; y++) {
-                current->Tab[i][y] = random();
-            }
-    }
-return current;
 }
 
 ControlGrid* ControlGrid_fill(ControlGrid* controlcurrent, Grid* current) {
@@ -63,7 +65,6 @@ ControlGrid* ControlGrid_fill(ControlGrid* controlcurrent, Grid* current) {
                 nouvelle->previous = NULL;
                 controlcurrent->first = nouvelle;
                 controlcurrent->last = nouvelle;
-                printf("prout");
             }
             else
             {
@@ -77,19 +78,53 @@ ControlGrid* ControlGrid_fill(ControlGrid* controlcurrent, Grid* current) {
 return controlcurrent;
  }
 
-double random() {
-   return 0 + (int) (rand() / (double) (RAND_MAX + 1) * (1 - 0 + 1));
+ControlGrid* PreviousGrid(ControlGrid *controlcurrent){
+    Grid* current = controlcurrent->last;
+
+    current = current->previous;
+    controlcurrent->last = current;
+
+    return controlcurrent;
 }
 
-void Grid_display(Grid *current) {
-    printf("--- Affichage de la Grille ! ---- \n");
-    int i, y;
-        for (i=0; i < current->lignes ; i++) {
-            for (y=0; y < current->colonnes ; y++) {
-                printf("| %d |", current->Tab[i][y]);
-            }
-            printf("\n");
+ControlGrid* NextGrid(ControlGrid *controlcurrent, Grid* g){
+    Grid* current = controlcurrent->last;
+    
+    current = current->next;
+if (controlcurrent->last->next == NULL)
+    {
+        g =  Generate(g);
+        controlcurrent = ControlGrid_fill(controlcurrent,g);
+        
+        return controlcurrent;
     }
+else {
+    controlcurrent->last = current;
+    return controlcurrent;
+}
+}
+
+Grid* Grid_init(int lignes, int colonnes) {
+    int i;
+    Grid* current = (Grid*) malloc(sizeof(Grid));
+    current->lignes = lignes;
+    current->colonnes = colonnes;
+    current->Tab = malloc(lignes * sizeof(int*));
+
+    for (i=0; i < lignes ; i++) {
+        current->Tab[i] = malloc(colonnes * sizeof(int));
+    }
+return (current);
+}
+
+Grid* Grid_random(Grid* current) {
+    int i, y;
+        for (i=0; i < current->lignes; i++) {
+            for (y=0; y < current->colonnes; y++) {
+                current->Tab[i][y] = random();
+            }
+    }
+return current;
 }
 
 Grid* NeighbourCount(Grid* current) {
@@ -168,13 +203,10 @@ Grid* Generate(Grid* current) {
             if (current->Tab[i][y] == 1) 
             {
                 if (nouvelle->Tab[i][y] == 2 || nouvelle->Tab[i][y] == 3) {
-                    printf("sheeesh");
                     current->Tab[i][y] = 1;}
                 if (nouvelle->Tab[i][y] >= 4 && nouvelle->Tab[i][y] <= 8) {
-                    printf("pute");
                     current->Tab[i][y] = 0;}
                 if (nouvelle->Tab[i][y] == 0 || nouvelle->Tab[i][y] == 1) {
-                    printf("dedicace a personne");
                     current->Tab[i][y] = 0;}
             }
             else
@@ -189,30 +221,26 @@ Grid* Generate(Grid* current) {
     return current;
 }
 
-ControlGrid* PreviousGrid(ControlGrid *controlcurrent){
-    Grid* current = controlcurrent->last;
-
-    current = current->previous;
-    controlcurrent->last = current;
-
-    return controlcurrent;
-}
-
-ControlGrid* NextGrid(ControlGrid *controlcurrent, Grid* g){
-    Grid* current = controlcurrent->last;
-    
-    current = current->next;
-if (controlcurrent->last->next == NULL)
+Grid* ReadGrille(Grid* g) {
+    FILE* monfichier;
+    int i,y;
+    monfichier = fopen("read.txt","r");
+    if (monfichier == NULL)
     {
-        g =  Generate(g);
-        controlcurrent = ControlGrid_fill(controlcurrent,g);
-        
-        return controlcurrent;
+        printf("\nLe fichier nexiste pas ou nest pas valide\n");
+        return (0);
     }
-else {
-    printf("test2");
-    controlcurrent->last = current;
-    return controlcurrent;
+    else
+    {
+        int nb;
+        for (i=0; i < g->lignes; i++) {
+            for (y=0; y < g->colonnes; y++) {
+                nb = fgetc(monfichier);
+                g->Tab[i][y] = nb - 48;
+            }
+        }
+
+    }
+    fclose(monfichier);
+    return g;
 }
-}
-//sheesh vérifie l'initiation à null.

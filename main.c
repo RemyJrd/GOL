@@ -12,11 +12,11 @@ int main() {
 	Grid* current;
 	ControlGrid* ControlCurrent;
 
-	printf("--- Game Of Life ---\nChoisir le type de lancement: \n1 - Lignes et colonnes manuelle\n2 - Grille prédéfini");
+	printf("--- Game Of Life ---\nChoisir le type de lancement: \n1 - Lignes et colonnes manuelle\n2 - Grille predefini");
 	scanf("%d", &choixmode);
 	
 	
-	if (choixmode = 1) {
+	if (choixmode == 1) {
 		printf("Nombres de colonnes : ");
 		scanf("%d", &colonnes);
 
@@ -52,11 +52,31 @@ int main() {
 		Grid_display(ControlCurrent->last);
         }
 	}
-	else if (choixmode=2) {
+	else if (choixmode==2) {
+        current = ReadGrille(current);
+        printf("Veuillez entrer la taille de la grille à generer : \n Lignes: ");
+        scanf("%d", &lignes);
+		printf("Colonnes: ");
+		scanf("%d", &colonnes);
 
+        current = Grid_init(current-> lignes, current->colonnes);
+        current = Grid_random(current);
+
+        int nombregen;
+        printf("Combien de generations voulez-vous generer ? : ");
+        scanf("%d", &nombregen);
+        int gen=0;
+        while (gen < nombregen)
+        {
+            Generate(current);
+            gen++;
+        }
+        printf("Vous trouverez dans un fichier write.txt le resultat de la partie");
+		Grid_display(current);
+        save(current);
 	} 
 	else {
-		Printf("Erreur de saisie !");
+		printf("Erreur de saisie !");
 	}
 
 return 0;
