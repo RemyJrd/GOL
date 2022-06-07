@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
+#include <string.h> 
 #include "functions.h"
 
 int VerifInit(int lignes, int colonnes) {
@@ -23,21 +24,6 @@ void Grid_display(Grid *current) {
             }
             printf("\n");
     }
-}
-
-void save(Grid* g){
-    FILE *f = fopen("write.txt", "wb");
-    printf("\n");
-    int i,y;
-    for (i=0; i < g->lignes; i++)
-    {
-        for (y=0; y < g->colonnes; y++)
-        {
-            fprintf(f," %d",g->Tab[i][y]);
-        }
-        fprintf(f,"\n");
-    }
-    fclose(f);
 }
 
 ControlGrid* ControlGrid_init() {
@@ -224,10 +210,10 @@ Grid* Generate(Grid* current) {
 Grid* ReadGrille(Grid* g) {
     FILE* monfichier;
     int i,y;
-    monfichier = fopen("read.txt","r");
+    monfichier = fopen("input.txt","r");
     if (monfichier == NULL)
     {
-        printf("\nLe fichier nexiste pas ou nest pas valide\n");
+        printf("\nFichier dentree invalide\n");
         return (0);
     }
     else
@@ -236,11 +222,29 @@ Grid* ReadGrille(Grid* g) {
         for (i=0; i < g->lignes; i++) {
             for (y=0; y < g->colonnes; y++) {
                 nb = fgetc(monfichier);
-                g->Tab[i][y] = nb - 48;
+                g->Tab[i][y] =  nb - 48;;
+                if(nb == (-38)) {
+                    y=g->colonnes;
             }
         }
-
     }
     fclose(monfichier);
     return g;
+}
+}
+
+void save(Grid* current){
+    FILE *f = fopen("output.txt", "wb");
+    printf("\n");
+    int i,y;
+    for (i=0; i < current->lignes; i++)
+    {
+        for (y=0; y < current->colonnes; y++)
+        {
+            fprintf(f," %d",current->Tab[i][y]);
+        }
+        fprintf(f,"\n");
+
+    }
+    fclose(f);
 }

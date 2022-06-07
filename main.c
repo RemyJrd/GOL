@@ -12,16 +12,16 @@ int main() {
 	Grid* current;
 	ControlGrid* ControlCurrent;
 
-	printf("--- Game Of Life ---\nChoisir le type de lancement: \n1 - Lignes et colonnes manuelle\n2 - Grille predefini");
+	printf("--- Game Of Life ---\nChoisir le type de lancement: \n1 - Lignes et colonnes manuelle\n2 - Grille predefini\n");
 	scanf("%d", &choixmode);
 	
 	
 	if (choixmode == 1) {
-		printf("Nombres de colonnes : ");
-		scanf("%d", &colonnes);
-
-		printf("Nombres de Lignes: ");
+		printf("Nombres de lignes : ");
 		scanf("%d", &lignes);
+
+		printf("Nombres de colonnes: ");
+		scanf("%d", &colonnes);
 
  		VerifInit(lignes, colonnes);
 		current = Grid_init(lignes, colonnes);
@@ -53,16 +53,14 @@ int main() {
         }
 	}
 	else if (choixmode==2) {
-        current = ReadGrille(current);
-        printf("Veuillez entrer la taille de la grille à generer : \n Lignes: ");
+        printf("Veuillez entrer la taille de la grille a generer : \n Lignes: ");
         scanf("%d", &lignes);
 		printf("Colonnes: ");
 		scanf("%d", &colonnes);
-
-        current = Grid_init(current-> lignes, current->colonnes);
-        current = Grid_random(current);
-
-        int nombregen;
+		current = Grid_init(lignes,colonnes);
+		current = Grid_random(current);
+		current = ReadGrille(current);
+		int nombregen;
         printf("Combien de generations voulez-vous generer ? : ");
         scanf("%d", &nombregen);
         int gen=0;
@@ -72,7 +70,6 @@ int main() {
             gen++;
         }
         printf("Vous trouverez dans un fichier write.txt le resultat de la partie");
-		Grid_display(current);
         save(current);
 	} 
 	else {
